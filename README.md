@@ -1,24 +1,117 @@
-# README
+# About Project - Tutorial GraphQL
+The free and open-source tutorial to learn all around GraphQL to go from zero to production.
+https://www.howtographql.com/graphql-ruby/0-introduction/
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
 
-* Ruby version
+## Set up
 
-* System dependencies
+1. Clone the project
+```
+git clone git@github.com:derikbf/rails-graphql.git
+```
+```
+cd rails-graphql
+```
+2 - exec create and migrate
+``` 
+bundle exec rails db:create db:migrate
+``` 
+3. Install dependencies
+``` 
+bundle
+``` 
+4. Start the project
+```
+bundle exec rails server
+```
+http://localhost:3000/graphiql
 
-* Configuration
 
-* Database creation
+## Query and Mutations
+### create user
+```
+mutation {
+  createUser(input: {
+    name: "Test User",
+    authProvider: {
+      credentials: {
+        email: "email@example.com",
+        password: "123456"
+      }
+    }
+  }
+  ) {
+    id
+    name
+    email
+  }
+}
+```
 
-* Database initialization
+### Get token
+```
+mutation {
+  signinUser(input: {
+    credentials: {
+      email: "email@example.com",
+      password: "123456"
+    }
+  }) {
+    token
+    user {
+      id
+    }
+  }
+}
+```
 
-* How to run the test suite
+### create link
+```
+mutation {
+  createLink(input: {
+    description: "http://npmjs.com/package/graphql-tools",
+    url: "Best tools!"
+  }) {
+    id
+    url
+    description
+    postedBy {
+      id
+      name
+    }
+  }
+}
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+### createVote
+```
+mutation {
+  createVote(input: {linkId: "1"}) {
+    link {
+      description
+    }
+    user {
+      name
+    }
+  }
+}
+```
 
-* Deployment instructions
-
-* ...
+### Query
+```
+query allLinks
+{
+  allLinks {
+    id
+    postedBy {
+      name
+      votes {
+        link {
+          description
+        }
+      }
+    }
+  }
+} 
+```
